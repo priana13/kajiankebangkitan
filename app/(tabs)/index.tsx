@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground, ScrollView } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
 
 import Navbar from '@/components/Navbar';
 import VideoList from '@/components/VideoList';

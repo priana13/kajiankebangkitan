@@ -1,9 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet } from 'react-native';
 
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import Navbar from '@/components/Navbar';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import { Link } from 'expo-router';
 
 export default function TabTwoScreen() {
@@ -26,20 +25,17 @@ export default function TabTwoScreen() {
     '/kajian/arifin', '/kajian/yusuf',
   ];
 
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#6AA0E7', dark: '#2475DF' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Ustadz</ThemedText>
-      </ThemedView>
+  return (     
+    <ImageBackground
+      source={require('@/assets/images/background.jpg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+
+      <ScrollView contentContainerStyle={styles.container}>
+      
+      <Navbar title="List Ustadz" />
+   
       <ThemedView style={styles.gridContainer}>
         {Array.from({ length: 6 }).map((_, rowIdx) => (
           <ThemedView key={rowIdx} style={styles.row}>
@@ -55,11 +51,20 @@ export default function TabTwoScreen() {
           </ThemedView>
         ))}
       </ThemedView>
-    </ParallaxScrollView>
+
+     </ScrollView>
+
+
+       
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: { flex: 1 },
+  container: { paddingTop: 32, flexGrow: 1 },
+  content: { flex: 1, marginHorizontal: 12 },
+
   headerImage: {
     color: '#808080',
     bottom: -90,
@@ -69,10 +74,14 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+    backgroundColor:"transparent",
+    paddingHorizontal:10
   },
   gridContainer: {
     marginTop: 24,
     gap: 12,
+    padding: 12,
+    
   },
   row: {
     flexDirection: 'row',
@@ -95,4 +104,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#007AFF',
   },
+  title: { fontSize: 22, fontWeight: 'bold', color: '#fff' },
 });

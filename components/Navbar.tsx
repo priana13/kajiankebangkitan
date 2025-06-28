@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 
 const shalatOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
-export default function Navbar() {
+export default function Navbar(props: { title?: string | null }) {
   const [time, setTime] = useState('');
   const [nextShalat, setNextShalat] = useState('');
+  // ambil title dari prop
+  const { title } = props;
+ 
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,7 +47,7 @@ export default function Navbar() {
     <View style={styles.container}>
       {/* StatusBar agar icon notifikasi (jam, batre, dll) jadi putih */}
       <StatusBar barStyle="light-content" />
-      <Text style={styles.title}>Kajian Kebangkitan</Text>
+      <Text style={styles.title}>{title?? 'Kajian Kebangkitan'}</Text>
       <View style={styles.right}>
         <Text style={styles.time}>{time}</Text>
         <Text style={styles.shalat}>{nextShalat}</Text>

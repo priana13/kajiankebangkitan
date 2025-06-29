@@ -19,7 +19,7 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <Navbar />
         <View style={styles.content}>
-          <VideoList onPressItem={() => navigation.navigate('PemutarVidio')} />
+          <VideoList onPressItem={(item) => navigation.navigate('PemutarVidio', {item})} />
         </View>
       </ScrollView>
     </ImageBackground>

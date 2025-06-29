@@ -44,7 +44,7 @@ export default function VideoList({ onPressItem }: { onPressItem?: (item: any) =
         const data = await response.json();
         setListVideo(data);
 
-        console.log('List Video:', data);
+        // console.log('List Video:', data);
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -65,7 +65,10 @@ export default function VideoList({ onPressItem }: { onPressItem?: (item: any) =
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => onPressItem && onPressItem(item)}>
           <View style={styles.card}>
-            <Image source={item.thumbnail} style={styles.thumbnail} />
+            <Image
+              source={item.thumbnail ? { uri: item.thumbnail } : require('@/assets/images/qurban.jpg')}
+              style={styles.thumbnail}
+            />
             <View style={styles.info}>
               <Text style={styles.title}>{item.judul}</Text>
               <Text style={styles.category}>{item.kategori}</Text>

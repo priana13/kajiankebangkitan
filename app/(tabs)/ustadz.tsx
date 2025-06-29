@@ -14,7 +14,7 @@ export default function TabTwoScreen() {
       const response = await fetch('https://kajian.sidonat.com/get-pemateri?json=true'); // Ganti dengan URL API yang sesuai
       const data = await response.json();
       setListUstadz(data);
-      console.log('List Ustadz:', data);
+      // console.log('List Ustadz:', data);
     } catch (error) {
       console.error('Error fetching ustadz:', error);
     }

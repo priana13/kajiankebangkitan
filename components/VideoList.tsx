@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const videos = [
   {
@@ -25,18 +25,50 @@ const videos = [
   },
 ];
 
+type VideoItem = {
+  id: string;
+  judul: string;
+  kategori: string;
+  pemateri: string;
+  thumbnail: string; // URL dari API
+};
+
 export default function VideoList({ onPressItem }: { onPressItem?: (item: any) => void }) {
+
+
+    const [listVideo, setListVideo] = useState<VideoItem[]>([]);
+  
+    const fetchVideo = async () => {
+      try {
+        const response = await fetch('https://kajian.sidonat.com/get-video?json=true'); // Ganti dengan URL API yang sesuai
+        const data = await response.json();
+        setListVideo(data);
+
+        console.log('List Video:', data);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    // Panggil fungsi fetchVideo saat komponen pertama kali dimuat
+    useEffect(() => {
+      fetchVideo();
+    }, []);
+
+
+
   return (
     <FlatList
-      data={videos}
+      data={listVideo}
       keyExtractor={item => item.id}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => onPressItem && onPressItem(item)}>
           <View style={styles.card}>
             <Image source={item.thumbnail} style={styles.thumbnail} />
             <View style={styles.info}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.category}>{item.category}</Text>
+              <Text style={styles.title}>{item.judul}</Text>
+              <Text style={styles.category}>{item.kategori}</Text>
               <Text style={styles.pemateri}>{item.pemateri}</Text>
             </View>
           </View>

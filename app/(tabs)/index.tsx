@@ -1,12 +1,14 @@
-import React from 'react';
-import { StyleSheet, View, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native';
 
 import Navbar from '@/components/Navbar';
 import VideoList from '@/components/VideoList';
 
 export default function HomeScreen() {
+
   const navigation = useNavigation();
+
 
   return (
     <ImageBackground
@@ -17,7 +19,7 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <Navbar />
         <View style={styles.content}>
-          <VideoList onPressItem={() => navigation.navigate('PemutarVidio')} />
+          <VideoList onPressItem={(item) => navigation.navigate('PemutarVidio', {item})} />
         </View>
       </ScrollView>
     </ImageBackground>

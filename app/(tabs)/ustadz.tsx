@@ -4,26 +4,26 @@ import Navbar from '@/components/Navbar';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Link } from 'expo-router';
+import { useEffect, useState } from 'react';
 
 export default function TabTwoScreen() {
-  // Data tulisan yang bisa diubah secara dinamis
-  const boxTexts = [
-    'Ust.Herman Saptaji', 'Ust. Ibrahim Bafadhol',
-    'Ust.Hawari', 'Ust.Ahmad jamaludin',
-    'Ust.M.Sarbini', 'Ust. Ali Maulida',
-    'Ust.Ende Hasan', 'Ust. Faishol',
-    'Ust.Solahuddin', 'Ust.Fatih',
-    'Ust.Arifin', 'Ust.Yusuf Supriadi',
-  ];
-  // Link dinamis untuk setiap box
-  const boxLinks = [
-    '/kajian/herman', '/kajian/ibrahim',
-    '/kajian/hawari', '/kajian/ahmad',
-    '/kajian/sarbini', '/kajian/ali',
-    '/kajian/ende', '/kajian/faishol',
-    '/kajian/solahuddin', '/kajian/fatih',
-    '/kajian/arifin', '/kajian/yusuf',
-  ];
+  const [listUstadz, setListUstadz] = useState([]);
+
+  const fetchUstadz = async () => {
+    try {
+      const response = await fetch('https://kajian.sidonat.com/get-pemateri?json=true'); // Ganti dengan URL API yang sesuai
+      const data = await response.json();
+      setListUstadz(data);
+      // console.log('List Ustadz:', data);
+    } catch (error) {
+      console.error('Error fetching ustadz:', error);
+    }
+  };
+
+  // Panggil fungsi fetchUstadz saat komponen pertama kali dimuat
+  useEffect(() => {
+    fetchUstadz();
+  }, []);
 
   return (     
     <ImageBackground
@@ -37,19 +37,27 @@ export default function TabTwoScreen() {
       <Navbar title="List Ustadz" />
    
       <ThemedView style={styles.gridContainer}>
-        {Array.from({ length: 6 }).map((_, rowIdx) => (
-          <ThemedView key={rowIdx} style={styles.row}>
-            {Array.from({ length: 2 }).map((_, colIdx) => {
-              const idx = rowIdx * 2 + colIdx;
-              return (
+        {Array.isArray(listUstadz) && listUstadz.length > 0 ? (
+          // Tampilkan grid 2 kolom
+          listUstadz.reduce((rows: any[], ustadz, idx) => {
+            if (idx % 2 === 0) rows.push([ustadz]);
+            else rows[rows.length - 1].push(ustadz);
+            return rows;
+          }, []).map((row, rowIdx) => (
+            <ThemedView key={rowIdx} style={styles.row}>
+              {row.map((ustadz: any, colIdx: number) => (
                 <ThemedView key={colIdx} style={styles.box}>
-                  <ThemedText type="default" style={styles.boxText}>{boxTexts[idx]}</ThemedText>
-                  <Link href={boxLinks[idx] as any} style={styles.linkText}>kajian</Link>
+                  <ThemedText type="default" style={styles.boxText}>{ustadz.nama}</ThemedText>
+                  <Link href={`/kajian/${ustadz.slug}`} style={styles.linkText}>kajian</Link>
                 </ThemedView>
-              );
-            })}
-          </ThemedView>
-        ))}
+              ))}
+              {/* Jika jumlah ustadz ganjil, tambahkan box kosong */}
+              {row.length < 2 && <ThemedView style={[styles.box, { backgroundColor: 'transparent' }]} />}
+            </ThemedView>
+          ))
+        ) : (
+          <ThemedText type="default" style={styles.boxText}>Memuat data...</ThemedText>
+        )}
       </ThemedView>
 
      </ScrollView>
